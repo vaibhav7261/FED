@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONLINE CAR SHOP</title>
+</head>
+<body>
+  <body class="centered-container"></body>
+  <h1 style="font-size: 100px;"><center>CAR SHOP</center></h1>
+
+  <!-- Div to hold items and buttons -->
+  <div id="items-section"></div>
+
+  <!-- Div to hold cart items -->
+  <div id="cart-items-section">
+    <h2>Cart Items</h2>
+    <div id="cart-items"></div>
+    <p id="total-item-count">Cart (0 items)</p>
+    <p id="total-amount">Total: $0.00</p>
+  </div>
+
+<script>
+  // JavaScript code for adding items to the cart and rendering them
+
+  // Array of item names, prices, and corresponding image URLs
+  var items = [
+    { name: "FORTUNER", price: 50000, image: "https://t4.ftcdn.net/jpg/03/27/79/45/360_F_327794551_qDqXLV3Ni1yiiOreuJucN4Y78PRdI7Uy.jpg" },
+    { name: "SCORPIO N", price: 40000, image: "https://www.carscoops.com/wp-content/uploads/2022/06/Mahindra-Scorpio-N-9s.jpg" },
+    { name: "CRETA", price: 30000, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/2022_Hyundai_Creta_1.6_Plus_%28Chile%29_front_view.jpg/1200px-2022_Hyundai_Creta_1.6_Plus_%28Chile%29_front_view.jpg" },
+    { name: "THAR", price: 20000, image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Mahindra_Thar_Photoshoot_At_Perupalem_Beach_%28West_Godavari_District%2CAP%2CIndia_%29_Djdavid.jpg/1024px-Mahindra_Thar_Photoshoot_At_Perupalem_Beach_%28West_Godavari_District%2CAP%2CIndia_%29_Djdavid.jpg"},
+    { name: "VIRTUS", price: 25000, image: "https://cdn.motor1.com/images/mgl/KbJyll/s1/2022-vw-virtus.jpg" },
+    { name: "VERNA", price: 22000, image: "https://cdni.autocarindia.com/Utils/ImageResizer.ashx?n=https://cdni.autocarindia.com/ExtraImages/20230220030433_Verna.jpg" }
+  ];
+
+  // Function to create and style an element
+  function createElement(tagName, textContent, styles) {
+    var element = document.createElement(tagName);
+    element.textContent = textContent;
+    if (styles) {
+      Object.assign(element.style, styles);
+    }
+    return element;
+  }
+
+  // Function to add items to the cart
+  var cartItems = [];
+
+  function addToCart(item) {
+    cartItems.push(item);
+    renderCart();
+  }
+
+  // Function to remove item from the cart
+  function removeFromCart(index) {
+    cartItems.splice(index, 1);
+    renderCart();
+  }
+
+  // Function to render cart items
+  function renderCart() {
+    var cartContainer = document.getElementById('cart-items');
+    cartContainer.innerHTML = ''; // Clear previous content
+
+    // Object to store item count
+    var itemCounts = {};
+
+    cartItems.forEach(function(item, index) {
+      // Increment item count
+      itemCounts[item.name] = (itemCounts[item.name] || 0) + 1;
+
+      var cartItem = createElement('div', '', { marginBottom: '20px', borderBottom: '1px solid #ccc', paddingBottom: '5px', display: 'flex', alignItems: 'center' });
+      var itemImage = createElement('img', '');
+      itemImage.src = item.image;
+      itemImage.style.width = '200px';
+      itemImage.style.height = 'auto';
+      cartItem.appendChild(itemImage);
+      var itemName = createElement('span', item.name, { marginLeft: '20px', flexGrow: '1' });
+      cartItem.appendChild(itemName);
+      var deleteButton = createElement('button', 'Delete', { padding: '5px 10px', backgroundColor: '#dc3545', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', marginRight: '10px' });
+      deleteButton.onclick = function() { removeFromCart(index); };
+      cartItem.appendChild(deleteButton);
+
+      // Counter for each item
+      var counter = createElement('span', ' x ' + itemCounts[item.name], { marginRight: '10px' });
+      cartItem.appendChild(counter);
+
+      cartContainer.appendChild(cartItem);
+    });
+
+    // Update total item count
+    var totalItemCount = Object.values(itemCounts).reduce((acc, count) => acc + count, 0);
+    document.getElementById('total-item-count').textContent = 'Cart (' + totalItemCount + ')';
+
+    // Calculate total amount
+    var totalAmount = cartItems.reduce((total, item) => total + item.price, 0);
+    document.getElementById('total-amount').textContent = 'Total: $' + totalAmount.toFixed(2);
+  }
+
+  // Function to render items
+  function renderItems() {
+    var itemsContainer = document.getElementById('items-section');
+
+    items.forEach(function(item) {
+      var itemContainer = createElement('div', '', { display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '30px' });
+      var itemImage = createElement('img', '');
+      itemImage.src = item.image;
+      itemImage.style.width = '400px';
+      itemImage.style.height = 'auto';
+      itemContainer.appendChild(itemImage);
+      var itemName = createElement('span', item.name, { marginTop: '10px', fontWeight: 'bold' });
+      itemContainer.appendChild(itemName);
+      var itemPrice = createElement('span', '$' + item.price.toFixed(2), { marginTop: '10px' });
+      itemContainer.appendChild(itemPrice);
+      var addToCartButton = createElement('button', 'Add to Cart', { padding: '8px 16px', backgroundColor: '#007bff', color: '#fff', border: 'none', borderRadius: '5px', cursor: 'pointer', marginTop: '10px' });
+      addToCartButton.onclick = function() { addToCart(item); };
+      itemContainer.appendChild(addToCartButton);
+      itemsContainer.appendChild(itemContainer);
+    });
+  }
+
+  // Call function to render items
+  renderItems();
+
+  // Initial rendering of cart items
+  renderCart();
+</script>
+
+</body>
+</html>
+``
